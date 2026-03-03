@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGWords - Contador de Palabras Online</title>
+<meta name="description" content="AGWords es un contador de palabras online gratuito. Cuenta palabras, caracteres, párrafos, frases y analiza la densidad de palabras clave en tiempo real.">
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f6f9;
+    color: #111;
+    transition: 0.3s;
+}
+
+header {
+    background: #111827;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+nav {
+    text-align: center;
+    padding: 12px;
+    background: #1f2937;
+}
+
+nav a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+textarea {
+    width: 100%;
+    height: 250px;
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    resize: none;
+}
+
+.buttons {
+    margin-top: 10px;
+}
+
+button {
+    padding: 8px 15px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.primary {
+    background: #2563eb;
+    color: white;
+}
+
+.secondary {
+    background: #e5e7eb;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.section {
+    display: none;
+    margin-top: 30px;
+}
+
+footer {
+    margin-top: 50px;
+    padding: 20px;
+    background: #111827;
+    color: white;
+    text-align: center;
+    font-size: 14px;
+}
+
+.dark {
+    background: #111827;
+    color: white;
+}
+
+.dark textarea {
+    background: #1f2937;
+    color: white;
+    border: 1px solid #374151;
+}
+
+.dark .card {
+    background: #1f2937;
+}
+</style>
+</head>
+<body>
+
+<header>AGWords</header>
+
+<nav>
+<a onclick="showSection('inicio')">Inicio</a>
+<a onclick="showSection('herramientas')">Herramientas</a>
+<a onclick="showSection('contacto')">Contacto</a>
+<a onclick="showSection('privacidad')">Privacidad</a>
+</nav>
+
+<div class="container">
+
+<!-- INICIO -->
+<div id="inicio" class="section" style="display:block;">
+<textarea id="text" placeholder="Escribe o pega tu texto aquí..." oninput="updateStats()"></textarea>
+
+<div class="buttons">
+<button class="primary" onclick="copyText()">Copiar</button>
+<button class="secondary" onclick="clearText()">Limpiar</button>
+<button class="secondary" onclick="toggleDarkMode()">Modo oscuro</button>
+</div>
+
+<div class="stats">
+<div class="card"><strong>Palabras</strong><div id="words">0</div></div>
+<div class="card"><strong>Caracteres</strong><div id="characters">0</div></div>
+<div class="card"><strong>Sin espacios</strong><div id="noSpaces">0</div></div>
+<div class="card"><strong>Párrafos</strong><div id="paragraphs">0</div></div>
+<div class="card"><strong>Frases</strong><div id="sentences">0</div></div>
+<div class="card"><strong>Tiempo lectura</strong><div id="readingTime">0 min</div></div>
+<div class="card"><strong>Lectura en voz</strong><div id="speakingTime">0 min</div></div>
+</div>
+
+<h3>Palabras más usadas</h3>
+<div id="keywordList"></div>
+</div>
+
+<!-- HERRAMIENTAS -->
+<div id="herramientas" class="section">
+<h2>Funciones disponibles</h2>
+<ul>
+<li>Conteo de palabras en tiempo real</li>
+<li>Conteo de caracteres</li>
+<li>Caracteres sin espacios</li>
+<li>Conteo de párrafos</li>
+<li>Conteo de frases</li>
+<li>Cálculo de tiempo de lectura (200 palabras/min)</li>
+<li>Cálculo de tiempo de lectura en voz (130 palabras/min)</li>
+<li>Análisis de palabras más repetidas</li>
+<li>Modo oscuro</li>
+<li>Copiar texto rápidamente</li>
+<li>Limpiar texto en un clic</li>
+</ul>
+</div>
+
+<!-- CONTACTO -->
+<div id="contacto" class="section">
+<h2>Contacto</h2>
+<p>Si tienes dudas, sugerencias o propuestas, puedes escribir a:</p>
+<p><strong>alejandrogarcia12345678910e@gmail.com</strong></p>
+</div>
+
+<!-- PRIVACIDAD -->
+<div id="privacidad" class="section">
+<h2>Política de Privacidad</h2>
+<p>En AGWords respetamos tu privacidad. Esta herramienta funciona directamente en tu navegador. El texto que introduces no se guarda, no se almacena en servidores externos ni se comparte con terceros.</p>
+
+<p>No recopilamos datos personales identificables. En el futuro, esta página puede mostrar anuncios gestionados por terceros como Google AdSense, los cuales pueden utilizar cookies para mostrar publicidad relevante.</p>
+
+<p>Al utilizar esta web aceptas esta política de privacidad.</p>
+
+<p>Para cualquier consulta sobre privacidad puedes escribir al correo indicado en la sección de contacto.</p>
+</div>
+
+</div>
+
+<footer>
+© 2026 AGWords - Herramienta gratuita de análisis de texto.
+</footer>
+
+<script>
+function showSection(sectionId) {
+document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+document.getElementById(sectionId).style.display = 'block';
+window.scrollTo(0,0);
+}
+
+function updateStats() {
+let text = document.getElementById("text").value;
+
+let wordsArray = text.trim().split(/\s+/).filter(w => w.length > 0);
+let wordCount = wordsArray.length;
+
+let charCount = text.length;
+let noSpaceCount = text.replace(/\s/g, '').length;
+
+let paragraphCount = text.split(/\n+/).filter(p => p.trim().length > 0).length;
+let sentenceCount = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+
+let readingTime = Math.ceil(wordCount / 200);
+let speakingTime = Math.ceil(wordCount / 130);
+
+document.getElementById("words").innerText = wordCount;
+document.getElementById("characters").innerText = charCount;
+document.getElementById("noSpaces").innerText = noSpaceCount;
+document.getElementById("paragraphs").innerText = paragraphCount;
+document.getElementById("sentences").innerText = sentenceCount;
+document.getElementById("readingTime").innerText = readingTime + " min";
+document.getElementById("speakingTime").innerText = speakingTime + " min";
+
+calculateKeywords(wordsArray);
+}
+
+function calculateKeywords(wordsArray) {
+let freq = {};
+wordsArray.forEach(word => {
+word = word.toLowerCase().replace(/[^\wáéíóúñü]/g, '');
+if(word.length > 3){
+freq[word] = (freq[word] || 0) + 1;
+}
+});
+
+let sorted = Object.entries(freq).sort((a,b) => b[1] - a[1]).slice(0,10);
+
+let html = "<ul>";
+sorted.forEach(item => {
+let percentage = ((item[1] / wordsArray.length) * 100).toFixed(1);
+html += `<li>${item[0]} — ${item[1]} veces (${percentage}%)</li>`;
+});
+html += "</ul>";
+
+document.getElementById("keywordList").innerHTML = html;
+}
+
+function clearText(){
+document.getElementById("text").value = "";
+updateStats();
+}
+
+function copyText(){
+let textArea = document.getElementById("text");
+textArea.select();
+document.execCommand("copy");
+alert("Texto copiado");
+}
+
+function toggleDarkMode(){
+document.body.classList.toggle("dark");
+}
+</script>
+
+</body>
+</html>
